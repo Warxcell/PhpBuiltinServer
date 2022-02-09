@@ -33,7 +33,7 @@ final class Extension extends CodeceptExtension
         $this->webServerManager = new WebServerManager(
             realpath($config['documentRoot']),
             $config['hostname'],
-            $config['port'],
+            (int)$config['port'],
             $config['router'] ?? '',
             $config['readinessPath'] ?? '',
             $config['env'] ?? [],
