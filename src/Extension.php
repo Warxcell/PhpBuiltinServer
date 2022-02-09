@@ -7,8 +7,14 @@ namespace Arxy\Codecept\PhpBuiltinServer;
 use Codeception\Exception\ExtensionException;
 use Codeception\Exception\ModuleConfigException;
 use Codeception\Extension as CodeceptExtension;
+use Codeception\Test\Descriptor;
+use Codeception\TestInterface;
 
+use function codecept_output_dir;
+use function file_put_contents;
+use function preg_replace;
 use function realpath;
+use function sprintf;
 
 final class Extension extends CodeceptExtension
 {
@@ -33,9 +39,29 @@ final class Extension extends CodeceptExtension
         );
     }
 
-    public function beforeSuite()
+    public function beforeSuite(): void
     {
         $this->webServerManager->start();
+    }
+
+    private function getTestName(TestInterface $test): string
+    {
+        return preg_replace('~[^a-zA-Z0-9\x80-\xff]~', '.', Descriptor::getTestSignatureUnique($test));
+    }
+
+    public function _after(TestInterface $test): void
+    {
+        $subFolder = codecept_output_dir() . 'server';
+        $name = $this->getTestName($test);
+
+        file_put_contents(
+            $subFolder . sprintf('/%_stdout.txt', $name),
+            $this->webServerManager->getProcess()->getIncrementalOutput()
+        );
+        file_put_contents(
+            $subFolder . sprintf('/%_stderr.txt', $name),
+            $this->webServerManager->getProcess()->getIncrementalErrorOutput()
+        );
     }
 
     public function afterSuite()

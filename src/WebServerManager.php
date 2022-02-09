@@ -90,6 +90,11 @@ final class WebServerManager
         return $this->process->isStarted();
     }
 
+    public function getProcess(): Process
+    {
+        return $this->process;
+    }
+
     public function __destruct()
     {
         $this->quit();
