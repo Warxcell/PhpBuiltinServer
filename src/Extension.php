@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Arxy\Codecept\PhpBuiltinServer;
 
-use Codeception\Exception\ExtensionException;
-use Codeception\Exception\ModuleConfigException;
 use Codeception\Extension as CodeceptExtension;
 use Codeception\Test\Descriptor;
 use Codeception\TestInterface;
+use Throwable;
 
 use function codecept_output_dir;
 use function file_put_contents;
+use function is_dir;
+use function mkdir;
 use function preg_replace;
 use function realpath;
 use function sprintf;
@@ -39,9 +40,25 @@ final class Extension extends CodeceptExtension
         );
     }
 
+    /**
+     * @throws Throwable
+     */
     public function beforeSuite(): void
     {
-        $this->webServerManager->start();
+        try {
+            $this->webServerManager->start();
+        } catch (Throwable $e) {
+            file_put_contents(
+                codecept_output_dir() . 'server_stdout.txt',
+                $this->webServerManager->getProcess()->getOutput()
+            );
+            file_put_contents(
+                codecept_output_dir() . 'server_stderr.txt',
+                $this->webServerManager->getProcess()->getErrorOutput()
+            );
+
+            throw $e;
+        }
     }
 
     private function getTestName(TestInterface $test): string
