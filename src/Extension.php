@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arxy\Codecept\PhpBuiltinServer;
 
+use Codeception\Event\TestEvent;
 use Codeception\Extension as CodeceptExtension;
 use Codeception\Test\Descriptor;
 use Codeception\TestInterface;
@@ -22,6 +23,7 @@ final class Extension extends CodeceptExtension
     public static $events = [
         'suite.before' => 'beforeSuite',
         'suite.after' => 'afterSuite',
+        'test.after' => 'afterTest',
     ];
 
     private WebServerManager $webServerManager;
@@ -66,8 +68,10 @@ final class Extension extends CodeceptExtension
         return preg_replace('~[^a-zA-Z0-9\x80-\xff]~', '.', Descriptor::getTestSignatureUnique($test));
     }
 
-    public function _after(TestInterface $test): void
+    public function afterTest(TestEvent $event): void
     {
+        $test = $event->getTest();
+
         $subFolder = codecept_output_dir() . 'server';
         if (!is_dir($subFolder)) {
             mkdir($subFolder);
