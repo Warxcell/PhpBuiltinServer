@@ -80,11 +80,11 @@ final class Extension extends CodeceptExtension
         $name = $this->getTestName($test);
 
         file_put_contents(
-            $subFolder . sprintf('/%_stdout.txt', $name),
+            $subFolder . sprintf('/%s_stdout.txt', $name),
             $this->webServerManager->getProcess()->getIncrementalOutput()
         );
         file_put_contents(
-            $subFolder . sprintf('/%_stderr.txt', $name),
+            $subFolder . sprintf('/%s_stderr.txt', $name),
             $this->webServerManager->getProcess()->getIncrementalErrorOutput()
         );
     }
