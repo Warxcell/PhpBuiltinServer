@@ -52,6 +52,10 @@ final class Extension extends CodeceptExtension
     public function _after(TestInterface $test): void
     {
         $subFolder = codecept_output_dir() . 'server';
+        if (!is_dir($subFolder)) {
+            mkdir($subFolder);
+        }
+
         $name = $this->getTestName($test);
 
         file_put_contents(
