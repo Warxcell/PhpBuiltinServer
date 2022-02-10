@@ -63,6 +63,16 @@ final class WebServerManager
         //        $this->process->disableOutput();
     }
 
+    public function getHostname(): string
+    {
+        return $this->hostname;
+    }
+
+    public function getPort(): int
+    {
+        return $this->port;
+    }
+
     public function start(): void
     {
         $this->checkPortAvailable($this->hostname, $this->port);

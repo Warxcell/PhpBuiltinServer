@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Arxy\Codecept\PhpBuiltinServer;
 
+use Codeception\Event\SuiteEvent;
 use Codeception\Event\TestEvent;
 use Codeception\Extension as CodeceptExtension;
 use Codeception\Test\Descriptor;
 use Codeception\TestInterface;
 use Throwable;
 
+use function codecept_debug;
 use function codecept_output_dir;
 use function file_put_contents;
 use function is_dir;
@@ -45,8 +47,16 @@ final class Extension extends CodeceptExtension
     /**
      * @throws Throwable
      */
-    public function beforeSuite(): void
+    public function beforeSuite(SuiteEvent $event): void
     {
+        codecept_debug(
+            sprintf(
+                'Starting web server on %s:%s',
+                $this->webServerManager->getHostname(),
+                $this->webServerManager->getPort()
+            )
+        );
+
         try {
             $this->webServerManager->start();
         } catch (Throwable $e) {
