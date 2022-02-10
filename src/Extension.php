@@ -99,13 +99,13 @@ final class Extension extends CodeceptExtension
         );
     }
 
-    public function afterSuite()
+    public function afterSuite(): void
     {
+        codecept_debug(
+            sprintf(
+                'Stopping web server',
+            )
+        );
         $this->webServerManager->quit();
-    }
-
-    public function __destruct()
-    {
-        unset($this->webServerManager);
     }
 }
