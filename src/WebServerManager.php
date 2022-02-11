@@ -67,6 +67,11 @@ final class WebServerManager
         //        $this->process->disableOutput();
     }
 
+    public function getEnv(): array
+    {
+        return $this->process->getEnv();
+    }
+
     public function getHostname(): string
     {
         return $this->hostname;

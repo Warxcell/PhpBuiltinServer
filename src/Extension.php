@@ -14,6 +14,7 @@ use Throwable;
 use function codecept_debug;
 use function codecept_output_dir;
 use function file_put_contents;
+use function getenv;
 use function is_dir;
 use function mkdir;
 use function preg_replace;
@@ -27,6 +28,7 @@ final class Extension extends CodeceptExtension
         'suite.after' => 'afterSuite',
         'test.after' => 'afterTest',
     ];
+    private string $appEnv;
 
     private WebServerManager $webServerManager;
 
@@ -42,6 +44,8 @@ final class Extension extends CodeceptExtension
             $config['readinessPath'] ?? '',
             $config['env'] ?? [],
         );
+
+        $this->appEnv = $config['env']['APP_ENV'] ?? getenv('APP_ENV');
     }
 
     /**
@@ -51,9 +55,10 @@ final class Extension extends CodeceptExtension
     {
         codecept_debug(
             sprintf(
-                'Starting web server on %s:%s',
+                'Starting web server on %s:%s (APP_ENV: %s)',
                 $this->webServerManager->getHostname(),
-                $this->webServerManager->getPort()
+                $this->webServerManager->getPort(),
+                $this->appEnv
             )
         );
 
