@@ -7,6 +7,10 @@ namespace Arxy\Codecept\PhpBuiltinServer;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
+use function array_filter;
+use function array_merge;
+use function sprintf;
+
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
@@ -85,6 +89,24 @@ final class WebServerManager
         }
 
         $this->waitUntilReady($this->process, $url, 'web server', true);
+    }
+
+    public function getStdout(): string
+    {
+        if (!$this->process->isStarted()) {
+            return '';
+        }
+
+        return $this->process->getOutput();
+    }
+
+    public function getStderr(): string
+    {
+        if (!$this->process->isStarted()) {
+            return '';
+        }
+
+        return $this->process->getErrorOutput();
     }
 
     /**

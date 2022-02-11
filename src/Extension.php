@@ -62,11 +62,11 @@ final class Extension extends CodeceptExtension
         } catch (Throwable $e) {
             file_put_contents(
                 codecept_output_dir() . 'server_stdout.txt',
-                $this->webServerManager->getProcess()->getOutput()
+                $this->webServerManager->getStdout()
             );
             file_put_contents(
                 codecept_output_dir() . 'server_stderr.txt',
-                $this->webServerManager->getProcess()->getErrorOutput()
+                $this->webServerManager->getStderr()
             );
 
             throw $e;
