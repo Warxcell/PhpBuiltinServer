@@ -6,7 +6,7 @@ $now = new DateTimeImmutable();
 $line = sprintf('%s: %s %s', $now->format('d.m.Y H:i:s.u'), $_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
 
 $stdout = fopen('php://stdout', 'w');
-fwrite($stdout, $_SERVER['REQUEST_URI'] . PHP_EOL);
+fwrite($stdout, $line . PHP_EOL);
 fclose($stdout);
 
 $documentRoot = $_SERVER['DOCUMENT_ROOT'];
