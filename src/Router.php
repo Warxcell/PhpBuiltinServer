@@ -5,9 +5,7 @@ declare(strict_types=1);
 $now = new DateTimeImmutable();
 $line = sprintf('%s: %s %s', $now->format('d.m.Y H:i:s.u'), $_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
 
-$stdout = fopen('php://stdout', 'w');
-fwrite($stdout, $line . PHP_EOL);
-fclose($stdout);
+fwrite(STDOUT, $line . PHP_EOL);
 
 $documentRoot = $_SERVER['DOCUMENT_ROOT'];
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
